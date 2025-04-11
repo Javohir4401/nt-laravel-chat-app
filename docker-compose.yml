@@ -2,7 +2,7 @@ services:
     chat_app:
         build:
             context: .
-            dockerfile: ./docker/php.dockerfile
+            dockerfile: docker/Dockerfile
         container_name: chat_app
         restart: unless-stopped
         volumes:
@@ -11,10 +11,8 @@ services:
             - chat_app_network
         depends_on:
             - postgres
-        ports:
-            - "8080:8080"
-    #        command: >
-    #            sh -c "php artisan reverb:start && php artisan queue:listen"
+        #    command: >
+        #        sh -c "php artisan reverb:start && php artisan queue:listen"
 
     postgres:
         image: postgres
@@ -39,7 +37,7 @@ services:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         ports:
-            - "8081:80"
+            - "8082:80"
         networks:
             - chat_app_network
 
@@ -47,7 +45,7 @@ services:
         container_name: chat_nginx
         image: nginx:alpine  # Use the Nginx image
         ports:
-            - "9000:80"  # Map port 8080 on the host to port 80 inside the container
+            - "8080:80"  # Map port 8080 on the host to port 80 inside the container
         volumes:
             - ./:/var/www  # Mount the Laravel chat_application directory-
             - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf  # Use our Nginx config
@@ -64,7 +62,7 @@ services:
             - ./:/var/www
         tty: true
         ports:
-            - "5173:5173"  # For Vite development server
+            - "5175:5173"  # Changed from 5174:5173
         environment:
             - NODE_ENV=development
         command: >
@@ -76,7 +74,7 @@ services:
         image: redis:latest
         container_name: websocket_redis
         ports:
-            - "6379:6379"
+            - "6381:6379"  # Changed from 6380:6379
         volumes:
             - redis-data:/data
         networks:
