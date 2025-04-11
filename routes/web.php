@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\RoomController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
@@ -30,4 +31,10 @@ Route::middleware(['auth', UserLastOnlineTime::class])->group(function () {
 
     Route::post('/message', [HomeController::class, 'message'])
         ->name('message');
+    Route::get('/users/{userId}/room', [RoomController::class, 'getRoomByUser'])
+        ->name('rooms.show');
+
+
+    Route::get('/search', [SearchController::class, 'index']);
+
 });
