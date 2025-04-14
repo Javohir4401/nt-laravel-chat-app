@@ -46,8 +46,11 @@
                     v-for="contact in filteredContacts"
                     :key="contact.id"
                     :contact="contact"
-                    :isSelected="selectedContactId === contact.id"
-                    @select="$emit('select-contact', contact.id)"
+                    :isSelected="selectedContactId === contact.id || selectedContactId === contact.room_id"
+                    @select="$emit('select-contact', {
+                        id: contact.id,
+                        room_id: contact.room_id
+                    })"
                 />
             </transition-group>
 
@@ -152,7 +155,10 @@ export default {
                 // If current selected contact is not in filtered list and there are other contacts,
                 // select the first one in the filtered list
                 if (newValue.length > 0) {
-                    emit('select-contact', newValue[0].id);
+                    emit('select-contact', {
+                        id: newValue[0].id,
+                        room_id: newValue[0].room_id
+                    });
                 }
             }
         });

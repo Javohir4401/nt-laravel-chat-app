@@ -29,7 +29,7 @@ class RoomController extends Controller
                 }
 
                 $rooms[] = [
-                    'id' => $user->id,
+                    'room_id' => $room->id,
                     'name' => $user->name,
                     'lastMessage' => $lastMessageText,
                     'timestamp' => $lastMessageTime,

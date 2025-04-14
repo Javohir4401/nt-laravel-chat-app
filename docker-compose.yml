@@ -1,9 +1,9 @@
 services:
-    chat_app:
+    chat_app2:
         build:
             context: .
-            dockerfile: docker/Dockerfile
-        container_name: chat_app
+            dockerfile: ./docker/php.dockerfile
+        container_name: chat_app2
         restart: unless-stopped
         volumes:
             - .:/var/www
@@ -11,8 +11,10 @@ services:
             - chat_app_network
         depends_on:
             - postgres
-        #    command: >
-        #        sh -c "php artisan reverb:start && php artisan queue:listen"
+        ports:
+            - "8083:8080"
+    #        command: >
+    #            sh -c "php artisan reverb:start && php artisan queue:listen"
 
     postgres:
         image: postgres
@@ -37,7 +39,7 @@ services:
             PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
             PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
         ports:
-            - "8082:80"
+            - "8081:80"
         networks:
             - chat_app_network
 
@@ -45,12 +47,12 @@ services:
         container_name: chat_nginx
         image: nginx:alpine  # Use the Nginx image
         ports:
-            - "8080:80"  # Map port 8080 on the host to port 80 inside the container
+            - "9000:80"  # Map port 8080 on the host to port 80 inside the container
         volumes:
             - ./:/var/www  # Mount the Laravel chat_application directory-
             - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf  # Use our Nginx config
         depends_on:
-            - chat_app  # Ensure PHP-FPM is started before Nginx
+            - chat_app2  # Ensure PHP-FPM is started before Nginx
         networks:
             - chat_app_network  # Connect to the custom network
 
@@ -62,7 +64,7 @@ services:
             - ./:/var/www
         tty: true
         ports:
-            - "5175:5173"  # Changed from 5174:5173
+            - "5173:5173"  # For Vite development server
         environment:
             - NODE_ENV=development
         command: >
@@ -74,7 +76,7 @@ services:
         image: redis:latest
         container_name: websocket_redis
         ports:
-            - "6381:6379"  # Changed from 6380:6379
+            - "1234:4321"
         volumes:
             - redis-data:/data
         networks:
