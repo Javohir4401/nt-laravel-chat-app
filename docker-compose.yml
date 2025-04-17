@@ -68,7 +68,7 @@ services:
         environment:
             - NODE_ENV=development
         command: >
-            sh -c "npm install && npm run dev"
+            sh -c "npm install && npm run build"
         networks:
             - chat_app_network
 
