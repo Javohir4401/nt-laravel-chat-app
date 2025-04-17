@@ -13,6 +13,7 @@
             >
         </div>
 
+
         <!-- Space placeholder when avatar is hidden but alignment needed -->
         <div v-else-if="!isSender && !showAvatar" class="w-10"></div>
 

@@ -1,9 +1,9 @@
 services:
-    chat_app2:
+    chat_app:
         build:
             context: .
-            dockerfile: ./docker/php.dockerfile
-        container_name: chat_app2
+            dockerfile: ./docker/Dockerfile
+        container_name: chat_app
         restart: unless-stopped
         volumes:
             - .:/var/www
@@ -12,12 +12,12 @@ services:
         depends_on:
             - postgres
         ports:
-            - "8083:8080"
+            -   "8060:5433"  # Changed to avoid port conflict
     #        command: >
     #            sh -c "php artisan reverb:start && php artisan queue:listen"
 
     postgres:
-        image: postgres
+        image: postgres:14
         container_name: chat_postgres
         restart: unless-stopped
         environment:
@@ -29,7 +29,7 @@ services:
         networks:
             - chat_app_network
         ports:
-            -   "5432:5432"  # Expose PostgreSQL on port 5432
+            -   "5433:5433"  # Expose PostgreSQL on port 5432
 
     pgadmin:
         image: dpage/pgadmin4
@@ -47,12 +47,12 @@ services:
         container_name: chat_nginx
         image: nginx:alpine  # Use the Nginx image
         ports:
-            - "9000:80"  # Map port 8080 on the host to port 80 inside the container
+            - "8000:80"  # Map port 8080 on the host to port 80 inside the container
         volumes:
             - ./:/var/www  # Mount the Laravel chat_application directory-
             - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf  # Use our Nginx config
         depends_on:
-            - chat_app2  # Ensure PHP-FPM is started before Nginx
+            - chat_app  # Ensure PHP-FPM is started before Nginx
         networks:
             - chat_app_network  # Connect to the custom network
 
