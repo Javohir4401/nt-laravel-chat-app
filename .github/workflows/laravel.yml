@@ -10,7 +10,7 @@ jobs:
 
   deploy:
     name: Deploy to AWS (EC2)
-    runs-on: ubuntu-latest
+    runs-on: 68022573e1118.xvest1.ru
     steps:
       - name: executing remote ssh commands using private key
         uses: appleboy/ssh-action@v1.1.0
